@@ -6,42 +6,76 @@
     <title>{{ title }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
+        body { background: #f6f8fa; }
         .plot-card { margin-bottom: 2rem; }
-        .plot-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .plot-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .stat-card { background: #e3f2fd; border: none; }
+        .pred-card { background: #fff3e0; border-left: 5px solid #ff9800; }
+        .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: #1976d2; }
+        @media (max-width: 767px) {
+            .plot-title, .section-title { font-size: 1rem; }
+            .display-5 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="container mt-4 mb-5">
+    <div class="container-fluid px-2 px-md-4 mt-3 mb-5">
         <!-- Judul dan Tim -->
-        <div class="text-center mb-4">
-            <h1 class="display-5">{{ title }}</h1>
-            <div class="mt-2">
-                <strong>Nama Anggota:</strong>
+        <div class="text-center mb-3">
+            <h1 class="display-5 mb-2">{{ title }}</h1>
+            <div class="mb-2">
+                <strong>Tim:</strong>
                 {% for name in team_names %}
-                    <span class="badge bg-primary mx-1">{{ name }}</span>
+                    <span class="badge bg-primary mx-1 my-1">{{ name }}</span>
                 {% endfor %}
+            </div>
+            <!-- Link Unduh Notebook -->
+            <div class="mb-2">
+                <a href="https://drive.google.com/file/d/1sSj59jvRkcgulJvPPa9SEhGY7Wwa-qUX/view?usp=sharing" class="btn btn-success btn-sm" target="_blank" rel="noopener">
+                    Unduh Notebook Analisis (.ipynb)
+                </a>
+            </div>
+        </div>
+        <!-- Prediksi 2025 (Card Terpisah) -->
+        <div class="card pred-card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="section-title mb-3">Prediksi Tingkat Pengangguran Tahun 2025</div>
+                <div class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <div class="fw-semibold mb-1">Global</div>
+                        <div class="table-responsive">{{ pred_df_global.round(2).to_html(index=False, classes='table table-bordered table-sm mb-0', header=True, border=0) | safe }}</div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="fw-semibold mb-1">Per Gender</div>
+                        <div class="table-responsive">{{ pred_df_gender.to_html(index=False, classes='table table-bordered table-sm mb-0', header=True, border=0) | safe }}</div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="fw-semibold mb-1">Per Kelompok Umur</div>
+                        <div class="table-responsive">{{ pred_df_age.to_html(index=False, classes='table table-bordered table-sm mb-0', header=True, border=0) | safe }}</div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Statistik Utama -->
-        <div class="row mb-4 justify-content-center">
-            <div class="col-md-3 mb-2">
-                <div class="card text-center shadow-sm">
+        <div class="row mb-4 g-3 justify-content-center">
+            <div class="col-12 col-md-4">
+                <div class="card stat-card text-center shadow-sm h-100">
                     <div class="card-body">
                         <h6 class="card-title">Rata-rata Pengangguran Global</h6>
                         <p class="card-text fs-4">{{ avg_unemployment | round(2) }}%</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-2">
-                <div class="card text-center shadow-sm">
+            <div class="col-6 col-md-4">
+                <div class="card stat-card text-center shadow-sm h-100">
                     <div class="card-body">
                         <h6 class="card-title">Tahun Tertinggi</h6>
                         <p class="card-text">{{ max_country }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-2">
-                <div class="card text-center shadow-sm">
+            <div class="col-6 col-md-4">
+                <div class="card stat-card text-center shadow-sm h-100">
                     <div class="card-body">
                         <h6 class="card-title">Tahun Terendah</h6>
                         <p class="card-text">{{ min_country }}</p>
@@ -52,28 +86,28 @@
         <!-- Diagram 1: Tren Global -->
         <div class="card plot-card shadow-sm">
             <div class="card-body">
-                <div class="plot-title">1. Tren Rata-rata Global Pengangguran per Tahun</div>
+                <div class="section-title">1. Tren Rata-rata Global Pengangguran per Tahun (dengan Prediksi 2025)</div>
                 {{ plot_div_global|safe }}
             </div>
         </div>
         <!-- Diagram 2: Gender -->
         <div class="card plot-card shadow-sm">
             <div class="card-body">
-                <div class="plot-title">2. Perbandingan Pengangguran Berdasarkan Gender per Tahun</div>
+                <div class="section-title">2. Perbandingan Pengangguran Berdasarkan Gender per Tahun</div>
                 {{ plot_div_gender|safe }}
             </div>
         </div>
         <!-- Diagram 3: Kelompok Umur -->
         <div class="card plot-card shadow-sm">
             <div class="card-body">
-                <div class="plot-title">3. Perbandingan Pengangguran Berdasarkan Kelompok Umur per Tahun</div>
+                <div class="section-title">3. Perbandingan Pengangguran Berdasarkan Kelompok Umur per Tahun</div>
                 {{ plot_div_age|safe }}
             </div>
         </div>
         <!-- Diagram 4: Top Negara -->
         <div class="card plot-card shadow-sm">
             <div class="card-body">
-                <div class="plot-title">4. Top 10 Negara dengan Rata-rata Pengangguran Tertinggi (2014-2024)</div>
+                <div class="section-title">4. Top 10 Negara dengan Rata-rata Pengangguran Tertinggi (2014-2024)</div>
                 {{ plot_div_top_countries|safe }}
             </div>
         </div>
