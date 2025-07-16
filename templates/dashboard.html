@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .plot-card { margin-bottom: 2rem; }
+        .plot-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4 mb-5">
+        <!-- Judul dan Tim -->
+        <div class="text-center mb-4">
+            <h1 class="display-5">{{ title }}</h1>
+            <div class="mt-2">
+                <strong>Nama Anggota:</strong>
+                {% for name in team_names %}
+                    <span class="badge bg-primary mx-1">{{ name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Statistik Utama -->
+        <div class="row mb-4 justify-content-center">
+            <div class="col-md-3 mb-2">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title">Rata-rata Pengangguran Global</h6>
+                        <p class="card-text fs-4">{{ avg_unemployment | round(2) }}%</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-2">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title">Tahun Tertinggi</h6>
+                        <p class="card-text">{{ max_country }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-2">
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title">Tahun Terendah</h6>
+                        <p class="card-text">{{ min_country }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Diagram 1: Tren Global -->
+        <div class="card plot-card shadow-sm">
+            <div class="card-body">
+                <div class="plot-title">1. Tren Rata-rata Global Pengangguran per Tahun</div>
+                {{ plot_div_global|safe }}
+            </div>
+        </div>
+        <!-- Diagram 2: Gender -->
+        <div class="card plot-card shadow-sm">
+            <div class="card-body">
+                <div class="plot-title">2. Perbandingan Pengangguran Berdasarkan Gender per Tahun</div>
+                {{ plot_div_gender|safe }}
+            </div>
+        </div>
+        <!-- Diagram 3: Kelompok Umur -->
+        <div class="card plot-card shadow-sm">
+            <div class="card-body">
+                <div class="plot-title">3. Perbandingan Pengangguran Berdasarkan Kelompok Umur per Tahun</div>
+                {{ plot_div_age|safe }}
+            </div>
+        </div>
+        <!-- Diagram 4: Top Negara -->
+        <div class="card plot-card shadow-sm">
+            <div class="card-body">
+                <div class="plot-title">4. Top 10 Negara dengan Rata-rata Pengangguran Tertinggi (2014-2024)</div>
+                {{ plot_div_top_countries|safe }}
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
