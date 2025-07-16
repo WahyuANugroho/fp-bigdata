@@ -1,4 +1,6 @@
 Flask
 pandas
 plotly
-gunicorn 
+scikit-learn
+numpy
+gunicorn
